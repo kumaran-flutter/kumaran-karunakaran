@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey footerKey = GlobalKey(); // Add this key for footer
 
   final List<String> _navItems = [
     'Home',
@@ -71,6 +72,19 @@ class _HomePageState extends State<HomePage> {
       MediaQuery.of(context).size.width < 900;
   bool get isLargeScreen => MediaQuery.of(context).size.width >= 900;
 
+  // Method to scroll to footer
+  void scrollToFooter() {
+    final context = footerKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+        alignment: 0.0,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -119,7 +133,7 @@ class _HomePageState extends State<HomePage> {
         TimelineExperienceSection(isMobile: isSmallScreen),
         SizedBox(height: isSmallScreen ? 24 : 32),
         ProjectsSections(isMobile: isSmallScreen),
-        PortfolioFooter(),
+        PortfolioFooter(key: footerKey),
       ],
     );
   }
@@ -325,7 +339,10 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildActionButtons({bool compact = false}) {
     if (compact) {
-      return ButtonComponents.filledButton(onPressed: () {}, label: 'Contact');
+      return ButtonComponents.filledButton(
+        onPressed: scrollToFooter,
+        label: 'Contact'
+      );
     }
 
     return Row(
@@ -335,7 +352,10 @@ class _HomePageState extends State<HomePage> {
           label: 'Resume',
         ),
         const SizedBox(width: 8),
-        ButtonComponents.filledButton(onPressed: () {}, label: 'Let’s Talk'),
+        ButtonComponents.filledButton(
+          onPressed: scrollToFooter,
+          label: 'Let’s Talk'
+        ),
       ],
     );
   }
@@ -405,7 +425,7 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 8),
           ButtonComponents.elevatedButton(
-            onPressed: () {},
+            onPressed: scrollToFooter,
             label: 'Let’s Talk',
           ),
         ],
@@ -423,7 +443,7 @@ class _HomePageState extends State<HomePage> {
         ),
         ButtonComponents.elevatedButton(
           size: Size(140, 40),
-          onPressed: () {},
+          onPressed: scrollToFooter,
           label: 'Let’s Talk',
         ),
       ],
