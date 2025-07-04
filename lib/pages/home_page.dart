@@ -14,14 +14,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey footerKey = GlobalKey(); // Add this key for footer
+  final GlobalKey homeKey = GlobalKey(); // Key for home section
+  final GlobalKey aboutKey = GlobalKey(); // Key for about section
+  final GlobalKey skillsKey = GlobalKey(); // Key for skills section
+  final GlobalKey experienceKey = GlobalKey(); // Key for experience section
+  final GlobalKey projectsKey = GlobalKey(); // Key for projects section
+  final GlobalKey footerKey = GlobalKey(); // Key for footer/contact section
 
   final List<String> _navItems = [
     'Home',
-    'Projects',
+    'About',
     'Skills',
-    'Education',
-    'Achievements',
+    'Experience',
+    'Projects',
   ];
 
   int _selectedIndex = 0;
@@ -85,6 +90,44 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Method to scroll to a specific section
+  void _scrollToSection(int index) {
+    GlobalKey? targetKey;
+
+    switch (index) {
+      case 0: // Home
+        targetKey = homeKey;
+        break;
+      case 1: // About
+        targetKey = aboutKey;
+        break;
+      case 2: // Skills
+        targetKey = skillsKey;
+        break;
+      case 3: // Experience
+        targetKey = experienceKey;
+        break;
+      case 4: // Projects
+        targetKey = projectsKey;
+        break;
+      case 5: // Contact
+        targetKey = footerKey;
+        break;
+    }
+
+    if (targetKey != null) {
+      final context = targetKey.currentContext;
+      if (context != null) {
+        Scrollable.ensureVisible(
+          context,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+          alignment: 0.0,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -109,6 +152,8 @@ class _HomePageState extends State<HomePage> {
   Widget _buildMainContent(double screenWidth) {
     return Column(
       children: [
+        // Home Section
+        Container(key: homeKey),
         Padding(
           padding: EdgeInsets.symmetric(
             vertical: isSmallScreen ? 16 : 43,
@@ -119,6 +164,8 @@ class _HomePageState extends State<HomePage> {
               _buildProfileSection(screenWidth),
               SizedBox(height: isSmallScreen ? 24 : 32),
               CarouselComponent(),
+              // About Section
+              Container(key: aboutKey),
               AboutSection(
                 isSmallScreen: isSmallScreen,
                 displayExperience: _displayExperience,
@@ -128,10 +175,16 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        // Skills Section
+        Container(key: skillsKey),
         SkillsSection(isMobile: isSmallScreen),
         SizedBox(height: isSmallScreen ? 24 : 32),
+        // Experience Section
+        Container(key: experienceKey),
         TimelineExperienceSection(isMobile: isSmallScreen),
         SizedBox(height: isSmallScreen ? 24 : 32),
+        // Projects Section
+        Container(key: projectsKey),
         ProjectsSections(isMobile: isSmallScreen),
         PortfolioFooter(key: footerKey),
       ],
@@ -175,68 +228,195 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 30,
-                  child: const Text(
-                    'KK',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Kumaran K',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Mobile application developer',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-              ],
-            ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.white.withOpacity(0.95),
+              Neutral.n50.withOpacity(0.97),
+            ],
           ),
-          ..._navItems.asMap().entries.map((entry) {
-            return ListTile(
-              leading: Icon(
-                _getIconForNavItem(entry.value),
-                color: _selectedIndex == entry.key
-                    ? Colors.blue
-                    : Colors.black54,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(0),
+            bottomLeft: Radius.circular(0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: Offset(-2, 0),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Primary.primary500, Primary.primary700],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
-              title: Text(
-                entry.value,
-                style: TextStyle(
-                  color: _selectedIndex == entry.key
-                      ? Colors.blue
-                      : Colors.black87,
-                  fontWeight: _selectedIndex == entry.key
-                      ? FontWeight.bold
-                      : FontWeight.normal,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 45,
+                        backgroundImage: AssetImage('assets/logo.jpeg'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Mobile Application Developer',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.95),
+                        fontSize: 15,
+                        letterSpacing: 0.3,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              selected: _selectedIndex == entry.key,
-              onTap: () {
-                setState(() => _selectedIndex = entry.key);
-                Navigator.pop(context);
-              },
-            );
-          }),
-        ],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Column(
+                  children: [
+                    ..._navItems.asMap().entries.map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: _buildDrawerItem(
+                          icon: _getIconForNavItem(entry.value),
+                          title: entry.value,
+                          isSelected: _selectedIndex == entry.key,
+                          onTap: () {
+                            setState(() => _selectedIndex = entry.key);
+                            Navigator.pop(context);
+                            _scrollToSection(entry.key);
+                          },
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+            Divider(color: Neutral.n200),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: ButtonComponents.filledButton(
+                onPressed: () => CommonUtils.downloadResume(context),
+                label: 'Download Resume',
+                icon: Icons.download_outlined,
+                size: Size(double.infinity, 48),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem({
+    required IconData icon,
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: isSelected ? 4 : 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: isSelected ? Primary.primary50 : Colors.white.withOpacity(0.7),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isSelected ? Primary.primary400 : Colors.transparent,
+              width: 1.5,
+            ),
+            gradient: isSelected
+                ? LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Primary.primary50,
+                      Primary.primary50.withOpacity(0.7),
+                    ],
+                  )
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isSelected ? Primary.primary100 : Neutral.n50,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: isSelected ? Primary.primary600 : Neutral.n700,
+                  size: 20, // Slightly smaller icon
+                ),
+              ),
+              SizedBox(width: 12), // Slightly reduced padding
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: isSelected ? Primary.primary600 : Neutral.n900,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    fontSize: 15, // Slightly smaller font
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (isSelected) SizedBox(width: 4),
+              if (isSelected)
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14, // Smaller arrow icon
+                  color: Primary.primary500,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -247,16 +427,30 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       height: 80,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Logo and name section
           Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.blue[300],
-                  backgroundImage: AssetImage('assets/logo.jpeg'),
+                child: Container(
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage('assets/logo.jpeg'),
+                  ),
                 ),
               ),
               if (!isSmallScreen || MediaQuery.of(context).size.width > 480)
@@ -266,10 +460,10 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       'Kumaran K',
-                      style: Paragraph02(color: Neutral.n900).regular,
+                      style: Paragraph02(color: Primary.primary700).semiBold,
                     ),
                     Text(
-                      'Software developer',
+                      'Mobile Application Developer',
                       style: Paragraph03(color: Neutral.n600).regular,
                     ),
                   ],
@@ -277,11 +471,8 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           if (isSmallScreen)
-            const Spacer(), // Push navigation to the right on small screens
-          // Navigation section
-          if (isSmallScreen)
             IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black87),
+              icon: Icon(Icons.menu, color: Primary.primary700, size: 28),
               onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
             )
           else
@@ -299,49 +490,174 @@ class _HomePageState extends State<HomePage> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          PopupMenuButton<int>(
-            icon: Icon(Icons.menu, color: Colors.black87),
-            onSelected: (index) => setState(() => _selectedIndex = index),
-            itemBuilder: (context) => _navItems.asMap().entries.map((entry) {
-              return PopupMenuItem<int>(
-                value: entry.key,
-                child: Text(entry.value),
-              );
-            }).toList(),
+          Container(
+            decoration: BoxDecoration(
+              color: Neutral.n50,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: PopupMenuButton<int>(
+              icon: Icon(Icons.menu, color: Primary.primary700),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              onSelected: (index) {
+                setState(() => _selectedIndex = index);
+                _scrollToSection(index);
+              },
+              itemBuilder: (context) => _navItems.asMap().entries.map((entry) {
+                return PopupMenuItem<int>(
+                  value: entry.key,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 200),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _getIconForNavItem(entry.value),
+                          color: _selectedIndex == entry.key
+                              ? Primary.primary600
+                              : Neutral.n700,
+                          size: 16,
+                        ),
+                        SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            entry.value,
+                            style: TextStyle(
+                              color: _selectedIndex == entry.key
+                                  ? Primary.primary600
+                                  : Neutral.n900,
+                              fontWeight: _selectedIndex == entry.key
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           _buildActionButtons(compact: true),
         ],
       );
     }
 
-    // Full navigation on large screens
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        ..._navItems.asMap().entries.map((entry) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: TextButton(
-              onPressed: () => setState(() => _selectedIndex = entry.key),
-              child: Text(
-                entry.value,
-                style: Paragraph03(color: Neutral.n700).regular,
+    // We'll use a flexible layout to adjust to available space
+
+    // Full navigation on large screens with improved UI
+    return Flexible(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Neutral.n50,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: _navItems.asMap().entries.map((entry) {
+                    bool isSelected = _selectedIndex == entry.key;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Primary.primary50
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected
+                                ? Primary.primary300
+                                : Colors.transparent,
+                            width: 1,
+                          ),
+                        ),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isSelected ? 12 : 10,
+                              vertical: 6,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() => _selectedIndex = entry.key);
+                            _scrollToSection(entry.key);
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isSelected) ...[
+                                Icon(
+                                  _getIconForNavItem(entry.value),
+                                  color: Primary.primary600,
+                                  size: 14,
+                                ),
+                                SizedBox(width: 4),
+                              ],
+                              Text(
+                                entry.value,
+                                style: isSelected
+                                    ? Paragraph03(
+                                        color: Primary.primary600,
+                                      ).semiBold
+                                    : Paragraph03(color: Neutral.n700).regular,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
-          );
-        }),
-        const SizedBox(width: 16),
-        _buildActionButtons(),
-      ],
+          ),
+          const SizedBox(width: 12),
+          _buildActionButtons(),
+        ],
+      ),
     );
   }
 
   Widget _buildActionButtons({bool compact = false}) {
     if (compact) {
       return ButtonComponents.filledButton(
-        onPressed: scrollToFooter,
-        label: 'Contact',
+        onPressed: () {
+          setState(() => _selectedIndex = 5); // Set Contact as selected
+          _scrollToSection(5); // Scroll to contact section
+        },
+        label: 'Let\'s Talk',
+        icon: Icons.chat_bubble_outline_rounded,
+        size: Size(120, 40),
       );
     }
 
@@ -350,11 +666,18 @@ class _HomePageState extends State<HomePage> {
         ButtonComponents.elevatedButton(
           onPressed: () => CommonUtils.downloadResume(context),
           label: 'Resume',
+          icon: Icons.download_outlined,
+          size: Size(120, 44),
         ),
         const SizedBox(width: 8),
         ButtonComponents.filledButton(
-          onPressed: scrollToFooter,
-          label: 'Let’s Talk',
+          onPressed: () {
+            setState(() => _selectedIndex = 5); // Set Contact as selected
+            _scrollToSection(5); // Scroll to contact section
+          },
+          label: 'Let\'s Talk',
+          icon: Icons.chat_bubble_outline_rounded,
+          size: Size(140, 44),
         ),
       ],
     );
@@ -421,12 +744,17 @@ class _HomePageState extends State<HomePage> {
         children: [
           ButtonComponents.filledButton(
             onPressed: () => CommonUtils.downloadResume(context),
-            label: 'Resume →',
+            label: 'Resume',
+            icon: Icons.download_outlined,
           ),
           SizedBox(height: 8),
           ButtonComponents.elevatedButton(
-            onPressed: scrollToFooter,
-            label: 'Let’s Talk',
+            onPressed: () {
+              setState(() => _selectedIndex = 5); // Set Contact as selected
+              _scrollToSection(5); // Scroll to contact section
+            },
+            label: 'Contact Me',
+            icon: Icons.mail_outline_rounded,
           ),
         ],
       );
@@ -439,12 +767,17 @@ class _HomePageState extends State<HomePage> {
         ButtonComponents.filledButton(
           size: Size(140, 40),
           onPressed: () => CommonUtils.downloadResume(context),
-          label: 'Resume →',
+          label: 'Resume',
+          icon: Icons.download_outlined,
         ),
         ButtonComponents.elevatedButton(
           size: Size(140, 40),
-          onPressed: scrollToFooter,
-          label: 'Let’s Talk',
+          onPressed: () {
+            setState(() => _selectedIndex = 5); // Set Contact as selected
+            _scrollToSection(5); // Scroll to contact section
+          },
+          label: 'Contact Me',
+          icon: Icons.mail_outline_rounded,
         ),
       ],
     );
@@ -479,17 +812,17 @@ class _HomePageState extends State<HomePage> {
   IconData _getIconForNavItem(String navItem) {
     switch (navItem) {
       case 'Home':
-        return Icons.home;
+        return Icons.home_outlined;
+      case 'About':
+        return Icons.person_outline_rounded;
       case 'Projects':
-        return Icons.work;
+        return Icons.work_outline_rounded;
       case 'Skills':
-        return Icons.code;
-      case 'Education':
-        return Icons.school;
-      case 'Achievements':
-        return Icons.emoji_events;
+        return Icons.code_outlined;
+      case 'Experience':
+        return Icons.timeline_outlined;
       default:
-        return Icons.circle;
+        return Icons.circle_outlined;
     }
   }
 }
