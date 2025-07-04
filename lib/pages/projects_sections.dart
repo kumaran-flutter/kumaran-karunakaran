@@ -294,7 +294,8 @@ class _ProjectCardState extends State<_ProjectCard> {
                     shape: BoxShape.circle,
                   ),
                 ),
-                Expanded(
+                // Fix: Replaced Expanded with Flexible to work properly within the Row
+                Flexible(
                   child: Text(
                     description,
                     style: Paragraph02(color: Neutral.n700).regular,

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Clean previous builds
+flutter clean
+
+# Get dependencies
+flutter pub get
+
 # Build the Flutter web app with the correct base href
 flutter build web --base-href "/portfolio/"
 

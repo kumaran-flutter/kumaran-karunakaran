@@ -578,9 +578,8 @@ class _PortfolioFooterState extends State<PortfolioFooter>
         if (isMobile) {
           return Column(children: [_buildServicesSection()]);
         } else {
-          return Row(
-            children: [Expanded(flex: 2, child: _buildServicesSection())],
-          );
+          // Fixed: When using a single child in Row, Expanded is not needed
+          return Row(children: [_buildServicesSection()]);
         }
       },
     );

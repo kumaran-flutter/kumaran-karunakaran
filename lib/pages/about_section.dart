@@ -122,7 +122,10 @@ Outside of work, I help run Namma Flutter Chennai, a growing community of develo
     required String label,
     required Duration duration,
   }) {
-    return Expanded(
+    // Use a Container instead of Expanded for more flexibility
+    // This allows it to be used in both Row and Wrap layouts
+    return SizedBox(
+      width: 150, // Fixed width to ensure consistency across layouts
       child: Column(
         crossAxisAlignment: widget.isSmallScreen
             ? CrossAxisAlignment.center
