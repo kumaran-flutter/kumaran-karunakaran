@@ -92,7 +92,8 @@ Outside of work, I help run Namma Flutter Chennai, a growing community of develo
           style: Paragraph02(color: Neutral.n700).regular,
         ),
         const SizedBox(height: 20),
-        _buildCountersSection(MediaQuery.of(context).size.width),
+        // if (!widget.isSmallScreen)
+        //   _buildCountersSection(MediaQuery.of(context).size.width),
       ],
     );
   }
