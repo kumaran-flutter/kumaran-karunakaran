@@ -341,7 +341,7 @@ class _HomePageState extends State<HomePage> {
     if (compact) {
       return ButtonComponents.filledButton(
         onPressed: scrollToFooter,
-        label: 'Contact'
+        label: 'Contact',
       );
     }
 
@@ -354,7 +354,7 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(width: 8),
         ButtonComponents.filledButton(
           onPressed: scrollToFooter,
-          label: 'Let’s Talk'
+          label: 'Let’s Talk',
         ),
       ],
     );
