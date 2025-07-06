@@ -21,6 +21,9 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey projectsKey = GlobalKey(); // Key for projects section
   final GlobalKey footerKey = GlobalKey(); // Key for footer/contact section
 
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrollListenerAttached = false;
+
   final List<String> _navItems = [
     'Home',
     'About',
@@ -68,6 +71,66 @@ class _HomePageState extends State<HomePage> {
         _displayBugs = _targetBugs.toDouble();
       });
     });
+
+    // Attach scroll listener after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_isScrollListenerAttached) {
+        _scrollController.addListener(_onScroll);
+        _isScrollListenerAttached = true;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_isScrollListenerAttached) {
+      _scrollController.removeListener(_onScroll);
+    }
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    // Get the offset of each section
+    final sectionKeys = [
+      homeKey,
+      aboutKey,
+      skillsKey,
+      experienceKey,
+      projectsKey,
+      footerKey,
+    ];
+    final contextList = sectionKeys.map((k) => k.currentContext).toList();
+    final positions = contextList.map((ctx) {
+      if (ctx == null) return null;
+      final box = ctx.findRenderObject() as RenderBox?;
+      if (box == null) return null;
+      // Get the offset from the top of the scrollable
+      final offset = box.localToGlobal(
+        Offset.zero,
+        ancestor: context.findRenderObject(),
+      );
+      return offset.dy;
+    }).toList();
+
+    // Find the section whose offset is closest to (but not greater than) 0
+    int newIndex = 0;
+    double minDiff = double.infinity;
+    for (int i = 0; i < positions.length - 1; i++) {
+      final pos = positions[i];
+      if (pos == null) continue;
+      final diff = pos.abs();
+      if (pos <= 80 && diff < minDiff) {
+        // 80 is header height
+        minDiff = diff;
+        newIndex = i;
+      }
+    }
+    if (newIndex != _selectedIndex) {
+      setState(() {
+        _selectedIndex = newIndex;
+      });
+    }
   }
 
   // Helper method to determine breakpoints
@@ -140,9 +203,11 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildHeader(),
-
           Expanded(
-            child: SingleChildScrollView(child: _buildMainContent(screenWidth)),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: _buildMainContent(screenWidth),
+            ),
           ),
         ],
       ),
