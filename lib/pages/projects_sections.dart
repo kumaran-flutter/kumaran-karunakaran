@@ -152,7 +152,9 @@ class _ProjectCardState extends State<_ProjectCard> {
         curve: Curves.easeOut,
         margin: const EdgeInsets.all(12),
         transform: _isHovered
-            ? (Matrix4.identity()..translate(0.0, -4.0)..scale(1.015))
+            ? (Matrix4.identity()
+                ..translate(0.0, -4.0)
+                ..scale(1.015))
             : Matrix4.identity(),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -174,7 +176,12 @@ class _ProjectCardState extends State<_ProjectCard> {
           children: [
             // Header: icon, title, badge
             Padding(
-              padding: const EdgeInsets.only(left: 24, right: 16, top: 24, bottom: 0),
+              padding: const EdgeInsets.only(
+                left: 24,
+                right: 16,
+                top: 24,
+                bottom: 0,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -212,7 +219,10 @@ class _ProjectCardState extends State<_ProjectCard> {
                   if (isFeatured)
                     Container(
                       margin: const EdgeInsets.only(left: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Primary.primary100,
                         borderRadius: BorderRadius.circular(20),
