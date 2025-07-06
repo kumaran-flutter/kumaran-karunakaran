@@ -787,9 +787,13 @@ class _TimelineExperienceSectionState extends State<TimelineExperienceSection>
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-              child: CommonUtils.getSvgIcon(experience.companyLogo),
+              width: 40,
+              height: 40,
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: CommonUtils.getSvgIcon(experience.companyLogo, size: 28),
             ),
             title: Text(
               experience.companyName,
