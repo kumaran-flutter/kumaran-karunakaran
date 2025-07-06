@@ -107,39 +107,22 @@ class _ProjectsSectionsState extends State<ProjectsSections> {
   Widget _buildProjectsLayout() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate if we have enough space for horizontal layout
         double cardWidth = widget.isMobile ? constraints.maxWidth : 400;
-        double totalWidth = cardWidth * projects.length;
-        bool hasSpaceForHorizontal =
-            totalWidth <= constraints.maxWidth && !widget.isMobile;
-
-        if (hasSpaceForHorizontal) {
-          // Horizontal layout with Wrap (no spacing)
-          return Wrap(
-            spacing: 0,
-            runSpacing: 0,
+        // Always use horizontal scroll for projects
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
             children: projects
                 .map(
-                  (project) => SizedBox(
+                  (project) => Container(
                     width: cardWidth,
+                    margin: const EdgeInsets.only(right: 24),
                     child: _ProjectCard(project: project),
                   ),
                 )
                 .toList(),
-          );
-        } else {
-          // Vertical layout
-          return Column(
-            children: projects
-                .map(
-                  (project) => Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: _ProjectCard(project: project),
-                  ),
-                )
-                .toList(),
-          );
-        }
+          ),
+        );
       },
     );
   }
@@ -160,39 +143,97 @@ class _ProjectCardState extends State<_ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isFeatured = widget.project['showButton'] == true;
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: Container(
-        margin: const EdgeInsets.all(8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        margin: const EdgeInsets.all(12),
+        transform: _isHovered
+            ? (Matrix4.identity()..translate(0.0, -4.0)..scale(1.015))
+            : Matrix4.identity(),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          border: Border.all(
+            color: _isHovered ? Primary.primary200 : Neutral.n100,
+            width: 1.1,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: _isHovered ? 12 : 4,
-              offset: Offset(0, _isHovered ? 6 : 2),
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-              color: _isHovered
-                  ? Primary.primary300.withOpacity(0.5)
-                  : Colors.grey.withOpacity(0.2),
-              width: 1,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header: icon, title, badge
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 16, top: 24, bottom: 0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [Primary.primary50, Colors.white],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      border: Border.all(color: Primary.primary200, width: 1.1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        widget.project['title'] == 'planXcel'
+                            ? Icons.task_alt_rounded
+                            : Icons.qr_code_scanner_rounded,
+                        size: 18,
+                        color: Primary.primary600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      widget.project['title'],
+                      style: HeadingH5(color: Primary.primary800).semiBold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (isFeatured)
+                    Container(
+                      margin: const EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Primary.primary100,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'Featured',
+                        style: TextStyle(
+                          color: Primary.primary600,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [_buildProjectImage(), _buildProjectContent()],
-            ),
-          ),
+            const SizedBox(height: 8),
+            _buildProjectImage(),
+            _buildProjectContent(),
+          ],
         ),
       ),
     );
@@ -200,33 +241,15 @@ class _ProjectCardState extends State<_ProjectCard> {
 
   Widget _buildProjectImage() {
     return Container(
-      height: 200,
+      height: 100,
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Primary.primary50, Primary.primary100],
+          colors: [Primary.primary50, Colors.white],
         ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              widget.project['title'] == 'planXcel'
-                  ? Icons.task_alt_rounded
-                  : Icons.qr_code_scanner_rounded,
-              size: 80,
-              color: Primary.primary600,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              widget.project['title'],
-              style: HeadingH5(color: Primary.primary800).semiBold,
-            ),
-          ],
-        ),
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
