@@ -1,0 +1,321 @@
+{
+  "personal": {
+    "name": "Kumaran Karunakaran",
+    "firstName": "Kumaran",
+    "lastName": "Karunakaran",
+    "title": "Mobile Application Developer",
+    "subtitle": "Mobile application developer",
+    "bio": "Hey, I'm, welcome to my space. I craft high-performance, user-friendly mobile apps using Flutter and Firebase, blending clean architecture with real-world impact.",
+    "aboutMe": "Hi, I'm Kumaran Karunakaran — a Mobile App Developer who enjoys building real-world solutions with Flutter, Firebase, and a strong dose of clean code. With nearly 3 years of experience, I've worked across logistics and WMS domains, turning complex workflows into simple, user-friendly apps published on both Play Store and App Store.\n\nOutside of work, I help run Namma Flutter Chennai, a growing community of developers who love Flutter as much as I do (well, almost). I enjoy architecting apps, debugging mysterious issues, and occasionally pushing perfect commits on the first try (rare but satisfying). I'm always up for collaborating on meaningful apps or sharing what I know with the dev community.",
+    "location": "Chennai, Tamil Nadu, India",
+    "phone": "+91 8300833451",
+    "email": "kumaransk1608@gmail.com",
+    "profileImage": "assets/logo.jpeg",
+    "resumeUrl": "https://drive.google.com/file/d/1PRQAnSMygnc5u-eC9Hu4kyeh5KbgZ9FY/view?usp=sharing",
+    "isOpenToWork": true
+  },
+  "contact": {
+    "email": "kumaransk1608@gmail.com",
+    "phone": "+91 8300833451",
+    "location": "Chennai, Tamil Nadu, India"
+  },
+  "socialLinks": [
+    {
+      "platform": "LinkedIn",
+      "icon": "assets/linkedin.svg",
+      "url": "https://www.linkedin.com/in/kumarankarunakaran/"
+    },
+    {
+      "platform": "Instagram",
+      "icon": "assets/instagram-svgrepo-com.svg",
+      "url": "https://www.instagram.com/kumaran_karunakaran_/"
+    },
+    {
+      "platform": "Email",
+      "icon": "assets/mail-send-svgrepo-com.svg",
+      "url": "mailto:kumaransk1608@gmail.com"
+    },
+    {
+      "platform": "Medium",
+      "icon": "assets/medium-svgrepo-com.svg",
+      "url": "https://medium.com/@skkumaran"
+    },
+    {
+      "platform": "GitHub",
+      "icon": "assets/social-github-svgrepo-com.svg",
+      "url": "https://github.com/kumaran-flutter"
+    }
+  ],
+  "navigation": [
+    {
+      "label": "Home",
+      "key": "home",
+      "icon": "home_outlined"
+    },
+    {
+      "label": "About",
+      "key": "about",
+      "icon": "person_outline_rounded"
+    },
+    {
+      "label": "Skills",
+      "key": "skills",
+      "icon": "code_outlined"
+    },
+    {
+      "label": "Experience",
+      "key": "experience",
+      "icon": "timeline_outlined"
+    },
+    {
+      "label": "Projects",
+      "key": "projects",
+      "icon": "work_outline_rounded"
+    }
+  ],
+  "stats": {
+    "experience": {
+      "value": 2,
+      "label": "Experience",
+      "suffix": "+"
+    },
+    "projects": {
+      "value": 5,
+      "label": "Projects",
+      "suffix": "+"
+    },
+    "features": {
+      "value": 50,
+      "label": "Feature's Developed",
+      "suffix": "+"
+    }
+  },
+  "skills": [
+    {
+      "name": "Flutter",
+      "icon": "assets/icons8-flutter.svg",
+      "category": "Frontend",
+      "level": "Expert"
+    },
+    {
+      "name": "Dart",
+      "icon": "assets/icons8-dart.svg",
+      "category": "Language",
+      "level": "Expert"
+    },
+    {
+      "name": "Firebase",
+      "icon": "assets/icons8-firebase.svg",
+      "category": "Backend",
+      "level": "Advanced"
+    },
+    {
+      "name": "Android",
+      "icon": "assets/icons8-android.svg",
+      "category": "Platform",
+      "level": "Advanced"
+    },
+    {
+      "name": "iOS",
+      "icon": "assets/icons8-ios.svg",
+      "category": "Platform",
+      "level": "Advanced"
+    },
+    {
+      "name": "JavaScript",
+      "icon": "assets/icons8-javascript.svg",
+      "category": "Language",
+      "level": "Intermediate"
+    },
+    {
+      "name": "Node.js",
+      "icon": "assets/icons8-nodejs.svg",
+      "category": "Backend",
+      "level": "Intermediate"
+    },
+    {
+      "name": "Express.js",
+      "icon": "assets/icons8-express-js.svg",
+      "category": "Backend",
+      "level": "Intermediate"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "assets/mongodb-svgrepo-com.svg",
+      "category": "Database",
+      "level": "Intermediate"
+    },
+    {
+      "name": "Git",
+      "icon": "assets/icons8-git.svg",
+      "category": "Tools",
+      "level": "Advanced"
+    },
+    {
+      "name": "GitHub",
+      "icon": "assets/icons8-github.svg",
+      "category": "Tools",
+      "level": "Advanced"
+    },
+    {
+      "name": "Figma",
+      "icon": "assets/icons8-figma.svg",
+      "category": "Design",
+      "level": "Intermediate"
+    },
+    {
+      "name": "Postman",
+      "icon": "assets/postman-icon-svgrepo-com.svg",
+      "category": "Tools",
+      "level": "Advanced"
+    },
+    {
+      "name": "Jira",
+      "icon": "assets/icons8-jira.svg",
+      "category": "Tools",
+      "level": "Intermediate"
+    }
+  ],
+  "experiences": [
+    {
+      "id": 1,
+      "title": "Mobile Application Developer",
+      "company": "Avow Solution",
+      "companyLogo": "assets/avow.svg",
+      "startDate": "2022-08-01",
+      "endDate": null,
+      "duration": "2+ years",
+      "location": "Chennai, Tamil Nadu",
+      "type": "Full-time",
+      "description": "Developing and maintaining mobile applications using Flutter and Firebase. Working on logistics and WMS domain applications.",
+      "responsibilities": [
+        "Developed cross-platform mobile applications using Flutter",
+        "Implemented Firebase backend services and real-time databases",
+        "Collaborated with UI/UX designers to create user-friendly interfaces",
+        "Published applications on Google Play Store and Apple App Store",
+        "Participated in code reviews and maintained clean code architecture"
+      ],
+      "technologies": ["Flutter", "Dart", "Firebase", "REST APIs", "Git"],
+      "achievements": [
+        "Successfully published 5+ applications on app stores",
+        "Improved app performance by 30% through optimization",
+        "Led development of key features for logistics applications"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Flutter Developer Intern",
+      "company": "Previous Company",
+      "companyLogo": null,
+      "startDate": "2022-01-01",
+      "endDate": "2022-07-31",
+      "duration": "7 months",
+      "location": "Chennai, Tamil Nadu",
+      "type": "Internship",
+      "description": "Learned mobile app development with Flutter and contributed to various projects.",
+      "responsibilities": [
+        "Learned Flutter development fundamentals",
+        "Contributed to existing mobile applications",
+        "Participated in team meetings and code reviews",
+        "Developed UI components and screens"
+      ],
+      "technologies": ["Flutter", "Dart", "Git"],
+      "achievements": [
+        "Successfully completed internship program",
+        "Contributed to 3+ mobile applications",
+        "Received positive feedback from mentors"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "Logistics Management App",
+      "description": "A comprehensive logistics management application for tracking shipments and managing warehouse operations.",
+      "image": "assets/image-1.png",
+      "technologies": ["Flutter", "Firebase", "REST APIs", "Google Maps"],
+      "features": [
+        "Real-time shipment tracking",
+        "Warehouse management system",
+        "Driver mobile application",
+        "Admin dashboard"
+      ],
+      "status": "Published",
+      "platforms": ["Android", "iOS"],
+      "githubUrl": null,
+      "playStoreUrl": "https://play.google.com/store",
+      "appStoreUrl": "https://apps.apple.com"
+    },
+    {
+      "id": 2,
+      "title": "WMS Mobile App",
+      "description": "Warehouse Management System mobile application for inventory tracking and management.",
+      "image": "assets/image-2.png",
+      "technologies": ["Flutter", "Firebase", "Barcode Scanner", "PDF"],
+      "features": [
+        "Inventory management",
+        "Barcode scanning",
+        "Report generation",
+        "Real-time synchronization"
+      ],
+      "status": "Published",
+      "platforms": ["Android", "iOS"],
+      "githubUrl": null,
+      "playStoreUrl": "https://play.google.com/store",
+      "appStoreUrl": "https://apps.apple.com"
+    },
+    {
+      "id": 3,
+      "title": "E-commerce Mobile App",
+      "description": "A modern e-commerce application with shopping cart, payment integration, and order tracking.",
+      "image": "assets/image.png",
+      "technologies": ["Flutter", "Firebase", "Payment Gateway", "Push Notifications"],
+      "features": [
+        "Product catalog",
+        "Shopping cart",
+        "Payment integration",
+        "Order tracking",
+        "Push notifications"
+      ],
+      "status": "In Development",
+      "platforms": ["Android", "iOS"],
+      "githubUrl": "https://github.com/kumaran-flutter",
+      "playStoreUrl": null,
+      "appStoreUrl": null
+    }
+  ],
+  "education": [
+    {
+      "id": 1,
+      "degree": "Bachelor of Engineering",
+      "field": "Computer Science",
+      "institution": "Sri Krishna College of Engineering and Technology",
+      "institutionLogo": "assets/skcet-logo.svg",
+      "startDate": "2018-06-01",
+      "endDate": "2022-05-31",
+      "grade": "First Class",
+      "location": "Coimbatore, Tamil Nadu"
+    }
+  ],
+  "communities": [
+    {
+      "name": "Namma Flutter Chennai",
+      "logo": "assets/nammaflutter_logo.svg",
+      "role": "Community Organizer",
+      "description": "Helping run a growing community of Flutter developers in Chennai",
+      "url": "https://www.meetup.com/namma-flutter-chennai/"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Flutter Development",
+      "issuer": "Google",
+      "date": "2022-08-01",
+      "credentialUrl": null
+    }
+  ],
+  "footer": {
+    "copyright": "© 2025 Kumaran Karunakaran. All rights reserved.",
+    "builtWith": "Built with Flutter & Firebase"
+  }
+}

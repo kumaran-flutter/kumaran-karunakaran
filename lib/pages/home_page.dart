@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kumaran_k_portfolio/styles/styles.dart';
 import '../components/box_shadow.dart';
 import '../components/components.dart';
+import '../models/models.dart';
+import '../services/portfolio_data_service.dart';
 import 'pages.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +14,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey homeKey = GlobalKey(); // Key for home section
   final GlobalKey aboutKey = GlobalKey(); // Key for about section
@@ -22,15 +24,12 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey footerKey = GlobalKey(); // Key for footer/contact section
 
   final ScrollController _scrollController = ScrollController();
+  late AnimationController _glowController;
+  late Animation<double> _glowAnimation;
   bool _isScrollListenerAttached = false;
 
-  final List<String> _navItems = [
-    'Home',
-    'About',
-    'Skills',
-    'Experience',
-    'Projects',
-  ];
+  PortfolioData? portfolioData;
+  bool isLoading = true;
 
   int _selectedIndex = 0;
 
@@ -38,39 +37,21 @@ class _HomePageState extends State<HomePage> {
   double _displayProjects = 3.0;
   double _displayBugs = 30.0;
 
-  final int _targetExperience = 2;
-  final int _targetProjects = 5;
-  final int _targetBugs = 50;
-  final List<Map<String, String>> socialLinks = [
-    {
-      'icon': AppIcons.linkedin,
-      'url': 'https://www.linkedin.com/in/kumarankarunakaran/',
-    },
-    {
-      'icon': AppIcons.instagramSvgrepoCom,
-      'url': 'https://www.instagram.com/kumaran_karunakaran_/',
-    },
-    {
-      'icon': AppIcons.mailSendSvgrepoCom,
-      'url': 'mailto:kumaransk1608@gmail.com',
-    },
-    {'icon': AppIcons.mediumSvgrepoCom, 'url': 'https://medium.com/@skkumaran'},
-    {
-      'icon': AppIcons.socialGithubSvgrepoCom,
-      'url': 'https://github.com/kumaran-flutter',
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
-      setState(() {
-        _displayExperience = _targetExperience.toDouble();
-        _displayProjects = _targetProjects.toDouble();
-        _displayBugs = _targetBugs.toDouble();
-      });
-    });
+    
+    _loadPortfolioData();
+    
+    // Initialize glow animation controller
+    _glowController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _glowAnimation = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _glowController, curve: Curves.easeInOut),
+    );
 
     // Attach scroll listener after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -81,12 +62,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _loadPortfolioData() async {
+    try {
+      final data = await PortfolioDataService.loadPortfolioData();
+      setState(() {
+        portfolioData = data;
+        isLoading = false;
+        // Set animation targets from JSON data
+        _displayExperience = data.stats.experience.value.toDouble();
+        _displayProjects = data.stats.projects.value.toDouble();
+        _displayBugs = data.stats.features.value.toDouble();
+      });
+    } catch (e) {
+      print('Error loading portfolio data: $e');
+      // Even if there's an error, we should have fallback data
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   void dispose() {
     if (_isScrollListenerAttached) {
       _scrollController.removeListener(_onScroll);
     }
     _scrollController.dispose();
+    _glowController.dispose();
     super.dispose();
   }
 
@@ -193,6 +195,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading || portfolioData == null) {
+      return Scaffold(
+        backgroundColor: Neutral.n50,
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Primary.primary500),
+          ),
+        ),
+      );
+    }
+
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -359,7 +372,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Mobile Application Developer',
+                      portfolioData!.personal.title,
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.95),
                         fontSize: 15,
@@ -371,6 +384,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Center(
+                child: portfolioData!.personal.isOpenToWork 
+                    ? _buildOpenToWorkIndicator() 
+                    : SizedBox.shrink(),
+              ),
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: SingleChildScrollView(
@@ -378,12 +399,12 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   children: [
-                    ..._navItems.asMap().entries.map((entry) {
+                    ...portfolioData!.navigation.asMap().entries.map((entry) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: _buildDrawerItem(
-                          icon: _getIconForNavItem(entry.value),
-                          title: entry.value,
+                          icon: _getIconForNavItem(entry.value.icon),
+                          title: entry.value.label,
                           isSelected: _selectedIndex == entry.key,
                           onTap: () {
                             setState(() => _selectedIndex = entry.key);
@@ -401,7 +422,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: ButtonComponents.filledButton(
-                onPressed: () => CommonUtils.downloadResume(context),
+                onPressed: () => CommonUtils.downloadResume(context, portfolioData!.personal.resumeUrl),
                 label: 'Download Resume',
                 icon: Icons.download_outlined,
                 size: Size(double.infinity, 48),
@@ -523,12 +544,19 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Kumaran K',
-                      style: Paragraph02(color: Primary.primary700).semiBold,
+                    Row(
+                      children: [
+                        Text(
+                          portfolioData!.personal.name,
+                          style: Paragraph02(color: Primary.primary700).semiBold,
+                        ),
+                        SizedBox(width: 12),
+                        if (portfolioData!.personal.isOpenToWork)
+                          _buildOpenToWorkIndicator(),
+                      ],
                     ),
                     Text(
-                      'Mobile Application Developer',
+                      portfolioData!.personal.title,
                       style: Paragraph03(color: Neutral.n600).regular,
                     ),
                   ],
@@ -536,9 +564,16 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           if (isSmallScreen)
-            IconButton(
-              icon: Icon(Icons.menu, color: Primary.primary700, size: 28),
-              onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+            Row(
+              children: [
+                if (portfolioData!.personal.isOpenToWork)
+                  _buildOpenToWorkIndicator(),
+                SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(Icons.menu, color: Primary.primary700, size: 28),
+                  onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                ),
+              ],
             )
           else
             _buildDesktopNavigation(),
@@ -576,7 +611,7 @@ class _HomePageState extends State<HomePage> {
                 setState(() => _selectedIndex = index);
                 _scrollToSection(index);
               },
-              itemBuilder: (context) => _navItems.asMap().entries.map((entry) {
+              itemBuilder: (context) => portfolioData!.navigation.asMap().entries.map((entry) {
                 return PopupMenuItem<int>(
                   value: entry.key,
                   child: ConstrainedBox(
@@ -585,7 +620,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          _getIconForNavItem(entry.value),
+                          _getIconForNavItem(entry.value.icon),
                           color: _selectedIndex == entry.key
                               ? Primary.primary600
                               : Neutral.n700,
@@ -594,7 +629,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(width: 8),
                         Flexible(
                           child: Text(
-                            entry.value,
+                            entry.value.label,
                             style: TextStyle(
                               color: _selectedIndex == entry.key
                                   ? Primary.primary600
@@ -644,7 +679,7 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: _navItems.asMap().entries.map((entry) {
+                  children: portfolioData!.navigation.asMap().entries.map((entry) {
                     bool isSelected = _selectedIndex == entry.key;
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -681,14 +716,14 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               if (isSelected) ...[
                                 Icon(
-                                  _getIconForNavItem(entry.value),
+                                  _getIconForNavItem(entry.value.icon),
                                   color: Primary.primary600,
                                   size: 14,
                                 ),
                                 SizedBox(width: 4),
                               ],
                               Text(
-                                entry.value,
+                                entry.value.label,
                                 style: isSelected
                                     ? Paragraph03(
                                         color: Primary.primary600,
@@ -729,7 +764,7 @@ class _HomePageState extends State<HomePage> {
     return Row(
       children: [
         ButtonComponents.elevatedButton(
-          onPressed: () => CommonUtils.downloadResume(context),
+          onPressed: () => CommonUtils.downloadResume(context, portfolioData!.personal.resumeUrl),
           label: 'Resume',
           icon: Icons.download_outlined,
           size: Size(120, 44),
@@ -791,11 +826,11 @@ class _HomePageState extends State<HomePage> {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      children: socialLinks
+      children: portfolioData!.socialLinks
           .map(
             (link) => InkWell(
-              onTap: () => CommonUtils.launchUrlFunc(link['url']!),
-              child: CommonUtils.getSvgIcon(link['icon']!, size: 24),
+              onTap: () => CommonUtils.launchUrlFunc(link.url),
+              child: CommonUtils.getSvgIcon(link.icon, size: 24),
             ),
           )
           .toList(),
@@ -808,7 +843,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ButtonComponents.filledButton(
-            onPressed: () => CommonUtils.downloadResume(context),
+            onPressed: () => CommonUtils.downloadResume(context, portfolioData!.personal.resumeUrl),
             label: 'Resume',
             icon: Icons.download_outlined,
           ),
@@ -831,7 +866,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         ButtonComponents.filledButton(
           size: Size(140, 40),
-          onPressed: () => CommonUtils.downloadResume(context),
+          onPressed: () => CommonUtils.downloadResume(context, portfolioData!.personal.resumeUrl),
           label: 'Resume',
           icon: Icons.download_outlined,
         ),
@@ -874,20 +909,75 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  IconData _getIconForNavItem(String navItem) {
-    switch (navItem) {
-      case 'Home':
+  IconData _getIconForNavItem(String iconName) {
+    switch (iconName) {
+      case 'home_outlined':
         return Icons.home_outlined;
-      case 'About':
+      case 'person_outline_rounded':
         return Icons.person_outline_rounded;
-      case 'Projects':
+      case 'work_outline_rounded':
         return Icons.work_outline_rounded;
-      case 'Skills':
+      case 'code_outlined':
         return Icons.code_outlined;
-      case 'Experience':
+      case 'timeline_outlined':
         return Icons.timeline_outlined;
       default:
         return Icons.circle_outlined;
     }
+  }
+
+  Widget _buildOpenToWorkIndicator() {
+    return AnimatedBuilder(
+      animation: _glowAnimation,
+      builder: (context, child) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.green.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.green.withOpacity(0.3),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green.withOpacity(_glowAnimation.value * 0.4),
+                blurRadius: 8,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.withOpacity(_glowAnimation.value),
+                      blurRadius: 6,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 6),
+              Text(
+                'Open to Work',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
