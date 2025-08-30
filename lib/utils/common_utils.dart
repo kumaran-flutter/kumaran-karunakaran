@@ -21,8 +21,10 @@ class CommonUtils {
   }
 
   static void downloadResume(BuildContext context, [String? resumeUrl]) {
-    final url = resumeUrl ?? 'https://drive.google.com/file/d/1PRQAnSMygnc5u-eC9Hu4kyeh5KbgZ9FY/view?usp=sharing';
-    
+    final url =
+        resumeUrl ??
+        'https://drive.google.com/file/d/1PRQAnSMygnc5u-eC9Hu4kyeh5KbgZ9FY/view?usp=sharing';
+
     launchUrlFunc(url);
 
     ScaffoldMessenger.of(context).showSnackBar(

@@ -116,11 +116,7 @@ class Contact {
   final String phone;
   final String location;
 
-  Contact({
-    required this.email,
-    required this.phone,
-    required this.location,
-  });
+  Contact({required this.email, required this.phone, required this.location});
 
   factory Contact.fromJson(Map<String, dynamic> json) {
     return Contact(
@@ -136,11 +132,7 @@ class SocialLink {
   final String icon;
   final String url;
 
-  SocialLink({
-    required this.platform,
-    required this.icon,
-    required this.url,
-  });
+  SocialLink({required this.platform, required this.icon, required this.url});
 
   factory SocialLink.fromJson(Map<String, dynamic> json) {
     return SocialLink(
@@ -156,11 +148,7 @@ class NavigationItem {
   final String key;
   final String icon;
 
-  NavigationItem({
-    required this.label,
-    required this.key,
-    required this.icon,
-  });
+  NavigationItem({required this.label, required this.key, required this.icon});
 
   factory NavigationItem.fromJson(Map<String, dynamic> json) {
     return NavigationItem(
@@ -196,11 +184,7 @@ class StatItem {
   final String label;
   final String suffix;
 
-  StatItem({
-    required this.value,
-    required this.label,
-    required this.suffix,
-  });
+  StatItem({required this.value, required this.label, required this.suffix});
 
   factory StatItem.fromJson(Map<String, dynamic> json) {
     return StatItem(
@@ -419,15 +403,9 @@ class Footer {
   final String copyright;
   final String builtWith;
 
-  Footer({
-    required this.copyright,
-    required this.builtWith,
-  });
+  Footer({required this.copyright, required this.builtWith});
 
   factory Footer.fromJson(Map<String, dynamic> json) {
-    return Footer(
-      copyright: json['copyright'],
-      builtWith: json['builtWith'],
-    );
+    return Footer(copyright: json['copyright'], builtWith: json['builtWith']);
   }
 }
